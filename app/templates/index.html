@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Chatbot - GPT & DeepSeek</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        function sendMessage() {
+            let userInput = document.getElementById("userInput").value.trim();
+            if (!userInput) return;
+
+            let chatBox = document.getElementById("chatBox");
+            let userMessage = `<p><strong>You:</strong> ${userInput}</p>`;
+            chatBox.innerHTML += userMessage;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let botMessage = `<p><strong>Bot:</strong> <span class="markdown">${marked.parse(data.reply)}</span></p>`;
+                chatBox.innerHTML += botMessage;
+                document.getElementById("userInput").value = "";
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("userInput").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>AI Chatbot - 9900 - 18 - GPT & DeepSeek</h1>
+
+    <div id="chatBox" style="border: 1px solid #ccc; padding: 10px; width: 50%; height: 300px; overflow-y: auto;"></div>
+    
+    <input type="text" id="userInput" placeholder="Type 'gpt' or 'dpsk' followed by your question..." style="width: 40%; padding: 5px;">
+    <button onclick="sendMessage()" style="padding: 5px;">Send</button>
+</body>
+</html>
+
+
+
