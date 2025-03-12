@@ -42,6 +42,7 @@ python -m venv venv
 venv\Scripts\activate
 (macOS/Linux) source venv/bin/activate
 
-### 安装 Flask
+### 安装 Flask  
 pip install flask
 pip install openai
+pip freeze > requirements.txt  (将当前虚拟环境中的所有已安装库及其版本号导出到 requirements.txt 文件中)
